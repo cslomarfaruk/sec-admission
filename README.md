@@ -41,34 +41,34 @@ The infrastructure runs on an Ubuntu Linux server, fully containerized with Dock
 
 ```mermaid
 flowchart TD
-    subgraph Edge Layer [Cloudflare Edge & Security]
-        DNS[DNS & SSL Termination]
-        WAF[WAF & DDoS Mitigation]
-        Turnstile[Turnstile Smart CAPTCHA]
+    subgraph EdgeLayer ["Cloudflare Edge & Security"]
+        DNS["DNS & SSL Termination"]
+        WAF["WAF & DDoS Mitigation"]
+        Turnstile["Turnstile Smart CAPTCHA"]
     end
 
-    subgraph Host Server [Ubuntu Linux VPS - Docker Network]
+    subgraph HostServer ["Ubuntu Linux VPS - Docker Network"]
         Traefik["Traefik v2.11 Reverse Proxy<br/>(Auto Let's Encrypt TLS & Rate Limiter)"]
         
-        subgraph Application Cluster
+        subgraph AppCluster ["Application Cluster"]
             App["Next.js 15 Standalone Container<br/>(Node.js App Router Runtime)"]
             Sharp["Sharp Image Processing Engine<br/>(Photo & Signature Optimization)"]
             PDFGen["jsPDF & AutoTable Engine<br/>(Admit Cards & Attendance Sheets)"]
         end
 
-        subgraph Data Layer
+        subgraph DataLayer ["Data Layer"]
             DB[("MySQL 8.0 Container<br/>(Persistent Volume Storage)")]
             Backups["Automated Daily Compressed Dumps<br/>(/srv/admission/backups)"]
             Storage["Media & Upload Volume<br/>(/srv/admission/uploads)"]
         end
     end
 
-    subgraph External Services [Third-Party Integrations]
+    subgraph ExtServices ["Third-Party Integrations"]
         Gateway["SSLCommerz Gateway<br/>(bKash / Nagad / Cards / Rocket)"]
         SMS["SMS Gateways<br/>(Alpha SMS / Boomcast API)"]
     end
 
-    Browser[Applicant / Admin Browser] --> DNS
+    Browser["Applicant / Admin Browser"] --> DNS
     DNS --> WAF
     WAF --> Turnstile
     Turnstile -->|Strict TLS / Port 443| Traefik
